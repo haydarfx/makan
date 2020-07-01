@@ -1,6 +1,6 @@
 <?php
 
-function request($url, $token = null, $data = null, $pin = null, $otpsetpin = null, $uuid = null){
+function request($url, $token = null, $data = null, $pin = null, $otpsetpin = null, $uuid = null, $loc = null){
 
 $header[] = "Host: api.gojekapi.com";
 $header[] = "User-Agent: okhttp/3.10.0";
@@ -13,6 +13,7 @@ $header[] = "Connection: keep-alive";
 $header[] = "X-User-Locale: id_ID";
 $header[] = "X-Location: -7.797068,110.370529";
 $header[] = "X-Location-Accuracy: 3.0";
+
 if ($pin):
 $header[] = "pin: $pin";
     endif;
@@ -25,6 +26,10 @@ endif;
 if ($uuid):
 $header[] = "User-uuid: $uuid";
 endif;
+if ($loc):
+$header[] = "X-Location: $loc";
+endif;
+
 $c = curl_init("https://api.gojekapi.com".$url);
     curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
