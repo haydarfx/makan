@@ -40,12 +40,14 @@ if (strpos($register, '"otp_token"')) {
     $otp = trim(fgets(STDIN));
     $data1 = '{"client_name":"gojek:cons:android","data":{"otp":"'.$otp.'","otp_token":"'.$otptoken.'"},"client_secret":"83415d06-ec4e-11e6-a41b-6c40088ab51e"}';
     $verif = request("/v5/customers/phone/verify", null, $data1);
+    
     if (strpos($verif, '"access_token"')) {
         echo color("white", "BERHASIL MENDAFTAR\n");
         $token = getStr('"access_token":"', '"', $verif);
         $uuid = getStr('"resource_owner_id":', ',', $verif);
         echo color("white", "+] Your access token : ".$token."\n\n");
         save("token.txt", $token);
+        
         echo color("white", "\n▬▬▬▬▬▬▬▬▬▬▬▬CLAIM VOUCHER▬▬▬▬▬▬▬▬▬▬▬▬");
         echo "\n".color("white", "CLAIM VOUCHER 1..");
         echo "\n".color("white", " Please wait");
@@ -53,6 +55,7 @@ if (strpos($register, '"otp_token"')) {
             echo color("white", ".");
             sleep(5);
         }
+        
         $code1 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"WENDYS"}');
         $message = fetch_value($code1, '"message":"', '"');
         if (strpos($code1, 'Promo kamu sudah bisa dipakai')) {
@@ -60,28 +63,32 @@ if (strpos($register, '"otp_token"')) {
             goto gocar;
         } else {
             echo "\n".color("white", " Message: ".$message);
+            
             gocar:
             echo "\n".color("white", " CLAIM VOUCHER 2.. ");
             echo "\n".color("white", " Please wait");
             for ($a = 1; $a <= 3; $a++) {
                 echo color("white", ".");
-                sleep(35);
+                sleep(3);
             }
-            $code1 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"COBAGOFOOD2206"}');
+            
+            $code1 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"COBAGOFOOD2206"}', null, null, null, '-7.8053324,110.3502107');
             $message = fetch_value($code1, '"message":"', '"');
             if (strpos($code1, 'Promo kamu sudah bisa dipakai.')) {
                 echo "\n".color("green", "Message: ".$message);
                 goto gofood;
             } else {
                 echo "\n".color("white", " Message: ".$message);
+                
                 gofood:
-                echo "\n".color("white", " CLAIM VOUCHER 2..");
+                echo "\n".color("white", " CLAIM VOUCHER 3..");
                 echo "\n".color("white", " Please wait");
                 for ($a = 1; $a <= 3; $a++) {
                     echo color("white", ".");
                     sleep(3);
                 }
-                $code1 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PAKEGOFOOD2206"}');
+                
+                $code1 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PESANGOFOOD2206"}', null, null, null, '-7.5636745,110.8015593');
                 $message = fetch_value($code1, '"message":"', '"');
                 echo "\n".color("white", " Message: ".$message);
                 echo "\n".color("white", " REFRESH..");
@@ -91,10 +98,7 @@ if (strpos($register, '"otp_token"')) {
                     sleep(3);
                 }
                 sleep(3);
-                $voc01 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"COBAGOFOOD2206"}');
-                $messagevoc01 = fetch_value($voc01, '"message":"', '"');
-                echo "\n".color("white", " Message: ".$messagevoc01);
-                sleep(1);
+                
                 $cekvoucher = request('/gopoints/v3/wallet/vouchers?limit=14&page=1', $token);
                 $total = fetch_value($cekvoucher, '"total_vouchers":', ',');
                 $voucher1 = getStr1('"title":"', '",', $cekvoucher, "1");
@@ -111,6 +115,7 @@ if (strpos($register, '"otp_token"')) {
                 $voucher12 = getStr1('"title":"', '",', $cekvoucher, "12");
                 $voucher13 = getStr1('"title":"', '",', $cekvoucher, "13");
                 $voucher14 = getStr1('"title":"', '",', $cekvoucher, "14");
+                
                 echo "\n".color("green", " Total voucher ".$total." : ");
                 echo "\n".color("green", "                     1. ".$voucher1);
                 echo "\n".color("green", "                     2. ".$voucher2);
@@ -127,6 +132,7 @@ if (strpos($register, '"otp_token"')) {
                 echo "\n".color("green", "                     13. ".$voucher13);
                 echo "\n".color("green", "                     14. ".$voucher14);
                 echo "\n";
+                
                 $expired1 = getStr1('"expiry_date":"', '"', $cekvoucher, '1');
                 $expired2 = getStr1('"expiry_date":"', '"', $cekvoucher, '2');
                 $expired3 = getStr1('"expiry_date":"', '"', $cekvoucher, '3');
@@ -153,6 +159,7 @@ if (strpos($register, '"otp_token"')) {
                 curl_close($ch);
                 $debug['text'] = $pesan;
                 $debug['respon'] = json_decode($datas, true);
+                
                 setpin:
                 echo "\n".color("yellow", "SETPIN..!!!: y/n ");
                 $pilih1 = trim(fgets(STDIN));
